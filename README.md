@@ -27,7 +27,7 @@ A aplicação deve permitir que uma pessoa cadastre suas receitas e despesas do 
 <hr>
 
 <h3 align="center"> 📅 Semana 01 </h3>
-<a href ="https://trello.com/b/kVeAJaoL/">Trello</a>
+
 
 
 
