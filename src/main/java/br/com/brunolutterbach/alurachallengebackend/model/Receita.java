@@ -1,5 +1,6 @@
 package br.com.brunolutterbach.alurachallengebackend.model;
 
+import br.com.brunolutterbach.alurachallengebackend.repository.ReceitaRepository;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,14 +10,15 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "receitas")
 @Data
 public class Receita {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String descricao;
     private Double valor;
@@ -31,4 +33,7 @@ public class Receita {
 
     public Receita() {
     }
+
 }
+
+

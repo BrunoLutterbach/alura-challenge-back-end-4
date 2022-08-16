@@ -1,10 +1,9 @@
 package br.com.brunolutterbach.alurachallengebackend.model;
 
+import br.com.brunolutterbach.alurachallengebackend.enums.Categoria;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -23,14 +22,19 @@ public class Despesa {
     private Double valor;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
+    @Enumerated(EnumType.STRING)
+    private Categoria categoria;
 
-
-    public Despesa(String descricao, Double valor, LocalDate data) {
+    public Despesa(String descricao, Double valor, LocalDate data, Categoria categoria) {
         this.descricao = descricao;
         this.valor = valor;
         this.data = data;
+        this.categoria = categoria;
     }
 
     public Despesa() {
+
     }
+
 }
+

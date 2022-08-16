@@ -1,5 +1,6 @@
 package br.com.brunolutterbach.alurachallengebackend.controller;
 
+import br.com.brunolutterbach.alurachallengebackend.DTO.ReceitaDTO;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.ReceitaForm;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.UpdateReceitaForm;
 import br.com.brunolutterbach.alurachallengebackend.model.Receita;
@@ -19,17 +20,29 @@ public class ReceitaController {
     private final ReceitaRepository receitaRepository;
 
     @GetMapping()
-    public List<Receita> listarReceitas() {
-       return receitaRepository.findAll();
+    public List<ReceitaDTO> listarReceitas(@RequestParam(required = false) String descricao) {
+        if (descricao == null) {
+            return ReceitaDTO.converter(receitaRepository.findAll());
+        }
+        return ReceitaDTO.converter(receitaRepository.findByDescricaoContainingIgnoreCase(descricao));
+    }
+
+    @GetMapping("/{mes}/{ano}")
+    public List<ReceitaDTO> listarReceitasPorMesEAno(@PathVariable int mes, @PathVariable int ano) {
+        List<Receita> receita = receitaRepository.findByMesEAno(mes, ano);
+        if(receita.isEmpty()) {
+            throw new RuntimeException("Nenhuma receita encontrada para o mês e ano informados");
+        }
+        return ReceitaDTO.converter(receita);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Receita> buscarReceita(@PathVariable Long id) {
+    public ResponseEntity<ReceitaDTO> buscarReceita(@PathVariable Long id) {
         Optional<Receita> receita = receitaRepository.findById(id);
         if (receita.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(receita.get());
+        return ResponseEntity.ok(new ReceitaDTO(receita.get()));
     }
 
     @PostMapping()
@@ -37,7 +50,7 @@ public class ReceitaController {
         for (Receita receita : receitaRepository.findAll()) {
             if (receita.getDescricao().equals(receitaForm.getDescricao())
                     && receita.getData().getMonth().equals(receitaForm.getData().getMonth())) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(409).build();
             }
         }
         Receita receita = receitaForm.converter(new Receita());

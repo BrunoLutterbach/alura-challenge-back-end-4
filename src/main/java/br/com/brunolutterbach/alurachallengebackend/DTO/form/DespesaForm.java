@@ -1,7 +1,10 @@
 package br.com.brunolutterbach.alurachallengebackend.DTO.form;
 
+import br.com.brunolutterbach.alurachallengebackend.enums.Categoria;
 import br.com.brunolutterbach.alurachallengebackend.model.Despesa;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -13,9 +16,19 @@ public class DespesaForm {
     private Double valor;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
+    @Enumerated(EnumType.STRING)
+    private String categoria;
 
     public Despesa converter(Despesa despesa) {
-        return new Despesa(descricao, valor, data);
+        despesa.setDescricao(descricao);
+        despesa.setValor(valor);
+        despesa.setData(data);
+        if (categoria != null) {
+            despesa.setCategoria(Categoria.valueOf(categoria));
+        } else {
+            despesa.setCategoria(Categoria.OUTROS);
+        }
+        return despesa;
     }
 
 
