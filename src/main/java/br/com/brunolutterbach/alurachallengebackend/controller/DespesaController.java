@@ -67,7 +67,7 @@ public class DespesaController {
         for (Despesa despesaDB : despesaRepository.findAll()) {
             if (despesaDB.getDescricao().equals(updateDespesaForm.getDescricao()) &&
                     despesaDB.getData().getMonth().equals(updateDespesaForm.getData().getMonth())) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(409).build();
             }
         }
         Despesa despesaAtualizada = updateDespesaForm.update(id, despesaRepository);

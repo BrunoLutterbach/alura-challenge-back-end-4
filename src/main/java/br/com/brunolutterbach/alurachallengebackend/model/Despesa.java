@@ -1,14 +1,13 @@
 package br.com.brunolutterbach.alurachallengebackend.model;
 
 import br.com.brunolutterbach.alurachallengebackend.enums.Categoria;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
 import lombok.Data;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "despesas")

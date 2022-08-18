@@ -67,7 +67,7 @@ public class ReceitaController {
         for (Receita receitaDB : receitaRepository.findAll()) {
             if (receitaDB.getDescricao().equals(updateReceitaForm.getDescricao()) &&
                     receitaDB.getData().getMonth().equals(updateReceitaForm.getData().getMonth())) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(409).build();
             }
         }
         Receita receitaAtualizada = updateReceitaForm.update(id, receitaRepository);

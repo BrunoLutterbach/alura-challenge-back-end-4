@@ -3,10 +3,10 @@ package br.com.brunolutterbach.alurachallengebackend.DTO.form;
 import br.com.brunolutterbach.alurachallengebackend.enums.Categoria;
 import br.com.brunolutterbach.alurachallengebackend.model.Despesa;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
 
 @Data
