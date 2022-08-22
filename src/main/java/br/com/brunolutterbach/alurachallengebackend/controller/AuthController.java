@@ -4,6 +4,7 @@ import br.com.brunolutterbach.alurachallengebackend.DTO.TokenDTO;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.LoginForm;
 import br.com.brunolutterbach.alurachallengebackend.config.security.TokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
+@Profile({"prod", "test"})
 public class AuthController {
 
     AuthenticationManager authManager;

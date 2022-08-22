@@ -25,8 +25,15 @@ public class ResumoController {
 
     @GetMapping("{mes}/{ano}")
     public ResponseEntity<ResumoDTO> resumoDoMes(@PathVariable int mes, @PathVariable int ano) {
+        if (mes < 1 || mes > 12) {
+            return ResponseEntity.badRequest().build();
+        }
         List<Receita> receitas = receitaRepository.findByMesEAno(mes, ano);
         List<Despesa> despesas = despesaRepository.findByMesEAno(mes, ano);
+
+        if (receitas.isEmpty() && despesas.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
 
         ResumoDTO resumoDTO = new ResumoDTO(receitas, despesas);
         return ResponseEntity.ok(resumoDTO);

@@ -16,5 +16,6 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
     @Query("select sum(r.valor) from Receita r where MONTH(r.data) = ?1 and YEAR(r.data) = ?2")
     Double receitasDoMes(int mes, int ano);
 
+    List<Receita> findIdByDescricaoContainingIgnoreCase(String aluguel);
 }
 

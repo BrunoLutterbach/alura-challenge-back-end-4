@@ -21,7 +21,6 @@ public class Receita {
     private Long id;
     private String descricao;
     private Double valor;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
 
     public Receita(String descricao, Double valor, LocalDate data) {

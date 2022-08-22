@@ -17,5 +17,6 @@ public interface DespesaRepository extends JpaRepository<Despesa, Long> {
     @Query("select sum(r.valor) from Despesa r where MONTH(r.data) = ?1 and YEAR(r.data) = ?2")
     Double despesasDoMes(int mes, int ano);
 
+    List<Despesa> findIdByDescricaoContainingIgnoreCase(String descricao);
 }
 

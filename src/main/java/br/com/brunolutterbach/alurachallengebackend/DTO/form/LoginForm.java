@@ -5,16 +5,16 @@ import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 public class LoginForm {
 
-    @NotBlank
+    @NotNull
     @Email
     private String email;
-    @NotBlank
+    @NotNull
     private String senha;
 
     public UsernamePasswordAuthenticationToken converter() {

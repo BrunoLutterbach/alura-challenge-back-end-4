@@ -35,4 +35,10 @@ public class UserController {
         return UsuarioDTO.converter(usuarioRepository.findAll());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Usuario> deletar(@PathVariable Long id) {
+        usuarioRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

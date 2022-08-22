@@ -19,7 +19,6 @@ public class Despesa {
     private Long id;
     private String descricao;
     private Double valor;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
@@ -34,6 +33,5 @@ public class Despesa {
     public Despesa() {
 
     }
-
 }
 
