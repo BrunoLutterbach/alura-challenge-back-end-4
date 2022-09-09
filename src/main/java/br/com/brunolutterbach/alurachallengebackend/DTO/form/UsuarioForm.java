@@ -1,6 +1,7 @@
 package br.com.brunolutterbach.alurachallengebackend.DTO.form;
 
 import br.com.brunolutterbach.alurachallengebackend.model.Usuario;
+import br.com.brunolutterbach.alurachallengebackend.repository.UsuarioRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,4 +27,10 @@ public class UsuarioForm {
         this.senha = encoder.encode(this.senha);
         return new Usuario(this.nome, this.email, this.senha);
     }
+
+    public Boolean existeCadastro(UsuarioRepository usuarioRepository) {
+        return usuarioRepository.findByEmail(this.email).isPresent();
+    }
+
+
 }

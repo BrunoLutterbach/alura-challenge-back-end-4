@@ -2,6 +2,7 @@ package br.com.brunolutterbach.alurachallengebackend.controller;
 
 import br.com.brunolutterbach.alurachallengebackend.DTO.UsuarioDTO;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.UsuarioForm;
+import br.com.brunolutterbach.alurachallengebackend.exceptions.ValidacaoException;
 import br.com.brunolutterbach.alurachallengebackend.model.Usuario;
 import br.com.brunolutterbach.alurachallengebackend.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
@@ -20,13 +21,12 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<UsuarioForm> cadastrar(@RequestBody @Valid UsuarioForm usuarioForm) {
-
-        for (Usuario usuario : usuarioRepository.findAll()) {
-            if (usuario.getEmail().equals(usuarioForm.getEmail())) {
-                return ResponseEntity.status(409).build();
-            }
+        if (usuarioForm.existeCadastro(usuarioRepository)) {
+            throw new ValidacaoException("E-mail já cadastrado");
         }
-        usuarioRepository.save(usuarioForm.converter());
+
+        Usuario usuario = usuarioForm.converter();
+        usuarioRepository.save(usuario);
         return ResponseEntity.ok(usuarioForm);
     }
 
