@@ -3,12 +3,14 @@ package br.com.brunolutterbach.alurachallengebackend.controller;
 import br.com.brunolutterbach.alurachallengebackend.DTO.ReceitaDTO;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.ReceitaForm;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.UpdateReceitaForm;
+import br.com.brunolutterbach.alurachallengebackend.exceptions.ValidacaoException;
 import br.com.brunolutterbach.alurachallengebackend.model.Receita;
 import br.com.brunolutterbach.alurachallengebackend.repository.ReceitaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/receitas")
 public class ReceitaController {
 
-    private final ReceitaRepository receitaRepository;
+    ReceitaRepository receitaRepository;
 
     @GetMapping()
     public List<ReceitaDTO> listarReceitas(@RequestParam(required = false) String descricao) {
@@ -31,7 +33,7 @@ public class ReceitaController {
     public List<ReceitaDTO> listarReceitasPorMesEAno(@PathVariable int mes, @PathVariable int ano) {
         List<Receita> receita = receitaRepository.findByMesEAno(mes, ano);
         if(receita.isEmpty()) {
-            throw new RuntimeException("Nenhuma receita encontrada para o mês e ano informados");
+            throw new ValidacaoException("Não existe receitas para o mês e ano informado");
         }
         return ReceitaDTO.converter(receita);
     }
@@ -46,11 +48,11 @@ public class ReceitaController {
     }
 
     @PostMapping()
-    public ResponseEntity<ReceitaForm> cadastrarReceita(@RequestBody ReceitaForm receitaForm) {
+    public ResponseEntity<?> cadastrarReceita(@RequestBody ReceitaForm receitaForm) {
         for (Receita receita : receitaRepository.findAll()) {
             if (receita.getDescricao().equals(receitaForm.getDescricao())
                     && receita.getData().getMonth().equals(receitaForm.getData().getMonth())) {
-                return ResponseEntity.status(409).build();
+                return ResponseEntity.status(409).body("Já existe uma receita cadastrada para o mesmo mês e ano");
             }
         }
         Receita receita = receitaForm.converter(new Receita());
@@ -59,7 +61,7 @@ public class ReceitaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateReceitaForm> atualizarReceita(@PathVariable Long id, @RequestBody UpdateReceitaForm updateReceitaForm) {
+    public ResponseEntity<?> atualizarReceita(@PathVariable Long id, @RequestBody UpdateReceitaForm updateReceitaForm) {
         Optional<Receita> receita = receitaRepository.findById(id);
         if (receita.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -67,7 +69,7 @@ public class ReceitaController {
         for (Receita receitaDB : receitaRepository.findAll()) {
             if (receitaDB.getDescricao().equals(updateReceitaForm.getDescricao()) &&
                     receitaDB.getData().getMonth().equals(updateReceitaForm.getData().getMonth())) {
-                return ResponseEntity.status(409).build();
+                return ResponseEntity.status(409).body("Já existe uma receita cadastrada para o mesmo mês e ano");
             }
         }
         Receita receitaAtualizada = updateReceitaForm.update(id, receitaRepository);

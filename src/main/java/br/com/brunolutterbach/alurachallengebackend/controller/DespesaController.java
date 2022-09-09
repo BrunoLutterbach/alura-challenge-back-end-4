@@ -3,6 +3,7 @@ package br.com.brunolutterbach.alurachallengebackend.controller;
 import br.com.brunolutterbach.alurachallengebackend.DTO.DespesaDTO;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.DespesaForm;
 import br.com.brunolutterbach.alurachallengebackend.DTO.form.UpdateDespesaForm;
+import br.com.brunolutterbach.alurachallengebackend.exceptions.ValidacaoException;
 import br.com.brunolutterbach.alurachallengebackend.model.Despesa;
 import br.com.brunolutterbach.alurachallengebackend.repository.DespesaRepository;
 import lombok.AllArgsConstructor;
@@ -30,8 +31,8 @@ public class DespesaController {
     @GetMapping("/{mes}/{ano}")
     public List<DespesaDTO> listarDespesasPorMesEAno(@PathVariable int mes, @PathVariable int ano) {
         List<Despesa> despesa = despesaRepository.findByMesEAno(mes, ano);
-        if(despesa.isEmpty()) {
-            throw new RuntimeException("Nenhuma despesa encontrada para o mês e ano informados");
+        if (despesa.isEmpty()) {
+            throw new ValidacaoException("Nenhuma despesa encontrada para o mês e ano informados");
         }
         return DespesaDTO.converter(despesa);
     }
@@ -46,11 +47,11 @@ public class DespesaController {
     }
 
     @PostMapping()
-    public ResponseEntity<DespesaForm> cadastrarDespesa(@RequestBody DespesaForm despesaForm) {
+    public ResponseEntity<?> cadastrarDespesa(@RequestBody DespesaForm despesaForm) {
         for (Despesa despesaDB : despesaRepository.findAll()) {
             if (despesaDB.getDescricao().equals(despesaForm.getDescricao()) &&
                     despesaDB.getData().getMonth().equals(despesaForm.getData().getMonth())) {
-                return ResponseEntity.status(409).build();
+                return ResponseEntity.status(409).body("Despesa já cadastrada para o mês e ano informados");
             }
         }
         Despesa despesa = despesaForm.converter(new Despesa());
@@ -59,7 +60,7 @@ public class DespesaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateDespesaForm> atualizarDespesa(@PathVariable Long id, @RequestBody UpdateDespesaForm updateDespesaForm) {
+    public ResponseEntity<?> atualizarDespesa(@PathVariable Long id, @RequestBody UpdateDespesaForm updateDespesaForm) {
         Optional<Despesa> despesa = despesaRepository.findById(id);
         if (despesa.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -67,7 +68,7 @@ public class DespesaController {
         for (Despesa despesaDB : despesaRepository.findAll()) {
             if (despesaDB.getDescricao().equals(updateDespesaForm.getDescricao()) &&
                     despesaDB.getData().getMonth().equals(updateDespesaForm.getData().getMonth())) {
-                return ResponseEntity.status(409).build();
+                return ResponseEntity.status(409).body("Despesa já cadastrada para o mês e ano informados");
             }
         }
         Despesa despesaAtualizada = updateDespesaForm.update(id, despesaRepository);
