@@ -15,7 +15,7 @@
 foi requisitada a primeira versão de uma aplicação para controle de orçamento familiar.
 A aplicação deve permitir que uma pessoa cadastre suas receitas e despesas do mês, bem como gerar um relatório mensal.</p>
 
-<h4>Funcionalidades a serem implementadas:</h4>
+<h4>Funcionalidades implementadas:</h4>
 
 <ul>
 <li>API com rotas implementadas seguindo as boas práticas do modelo REST;</li>
@@ -26,7 +26,7 @@ A aplicação deve permitir que uma pessoa cadastre suas receitas e despesas do 
 
 <hr>
 
-<h3 align="center"> 📅 Semana 01 </h3>
+
 
 
 
